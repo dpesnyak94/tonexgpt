@@ -30,6 +30,12 @@
       })
       .catch(error => {
         console.error('Error:', error);
+        if (error.message) {
+          responseContainer.innerHTML = 'An error occurred while processing your request: ' + error.message;
+        } else {
+          responseContainer.innerHTML = 'An error occurred while processing your request.';
+        }
+});
       });
     });
 
