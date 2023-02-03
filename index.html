@@ -1,8 +1,23 @@
 <html>
   <head>
-    <meta http-equiv="refresh" content="0;URL='./index.php'">
+    <script>
+      function sendRequest() {
+        var request = document.getElementById("request").value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "request.php", true);
+        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        xhr.onreadystatechange = function() {
+          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
+            document.getElementById("response").innerHTML = this.responseText;
+          }
+        };
+        xhr.send("request=" + encodeURIComponent(request));
+      }
+    </script>
   </head>
   <body>
-    You will be redirected to index.php. If not, click <a href="./index.php">here</a>.
+    <input type="text" id="request" />
+    <button onclick="sendRequest()">Send</button>
+    <div id="response"></div>
   </body>
 </html>
