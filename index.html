@@ -1,0 +1,53 @@
+<html>
+  <script>
+    const endpoint = "https://api.openai.com/v1/engines/davinci/jobs";
+
+    // define the API key
+    const apiKey = "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";
+
+    // function to send a request to the API
+    async function sendRequest(text) {
+      try {
+        // set up the API request
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`
+          },
+          body: JSON.stringify({
+            "prompt": text,
+            "max_tokens": 100,
+            "temperature": 0.7
+          })
+        });
+
+        // parse the API response
+        const json = await response.json();
+
+        // return the response text
+        return json.choices[0].text;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    // function to handle the form submission
+    async function handleSubmit(event) {
+      // prevent the form from reloading the page
+      event.preventDefault();
+
+      // get the text input value
+      const input = document.querySelector("#text-input").value;
+
+      // send the request to the API
+      const response = await sendRequest(input);
+
+      // update the response text
+      document.querySelector("#response").textContent = response;
+    }
+
+    // add an event listener to the form submit button
+    document.querySelector("#submit-button").addEventListener("click", handleSubmit);
+  </script>
+</html>
