@@ -1,23 +1,37 @@
 <html>
-  <head>
-    <script>
-      function sendRequest() {
-        var request = document.getElementById("request").value;
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", "request.php", true);
-        xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        xhr.onreadystatechange = function() {
-          if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-            document.getElementById("response").innerHTML = this.responseText;
-          }
-        };
-        xhr.send("request=" + encodeURIComponent(request));
-      }
-    </script>
-  </head>
-  <body>
-    <input type="text" id="request" />
-    <button onclick="sendRequest()">Send</button>
-    <div id="response"></div>
-  </body>
+  <div>
+  <input type="text" id="input-field"/>
+  <button id="submit-button">Submit</button>
+  </div>
+  <div id="response-container"></div>
+  <script>
+    const inputField = document.getElementById("input-field");
+    const submitButton = document.getElementById("submit-button");
+    const responseContainer = document.getElementById("response-container");
+
+    submitButton.addEventListener("click", function() {
+      const inputText = inputField.value;
+
+      fetch('https://api.openai.com/v1/engines/text-davinci-002/jobs', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': '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'
+        },
+        body: JSON.stringify({
+          prompt: inputText,
+          max_tokens: 100,
+          temperature: 0.5
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        responseContainer.innerHTML = data.choices[0].text;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    });
+
+  </script>
 </html>
